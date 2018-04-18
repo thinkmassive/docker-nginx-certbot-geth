@@ -14,10 +14,7 @@ auto_enable_configs
 nginx -g "daemon off;" &
 export NGINX_PID=$!
 
-# Next, run certbot to request all the ssl certs we can find
-/scripts/run_certbot.sh
-
-# Lastly, run startup scripts
+# Run startup scripts
 for f in /scripts/startup/*.sh; do
     if [[ -x "$f" ]]; then
         echo "Running startup script $f"
@@ -25,6 +22,9 @@ for f in /scripts/startup/*.sh; do
     fi
 done
 echo "Done with startup"
+
+# Next, run certbot to request all the ssl certs we can find
+/scripts/run_certbot.sh
 
 # Run `cron -f &` so that it's a background job owned by bash and then `wait`.
 # This allows SIGINT (e.g. CTRL-C) to kill cron gracefully, due to our `trap`.
