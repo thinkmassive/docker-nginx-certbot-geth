@@ -7,6 +7,17 @@ trap "kill 0" EXIT
 # Source in util.sh so we can have our nice tools
 . $(cd $(dirname $0); pwd)/util.sh
 
+# Determine Docker bridge IP
+docker_bridge_ip=$(docker network inspect bridge | grep Gateway | grep -o -E '[0-9.]+')
+
+# Set dynamic domain names
+domain_name=${domain_name:-example.local}
+ws_host=${ws_host:$docker_bridge_ip}
+ws_port=${ws_port:-80}
+sed -i "s/__DOMAIN_NAME__/$domain_name/g" /etc/nginx/conf.d/*.conf
+sed -i "s/__WS_HOST__/$ws_host/g" /etc/nginx/conf.d/*.conf
+sed -i "s/__WS_PORT__/$ws_port/g" /etc/nginx/conf.d/*.conf
+
 # Immediately run auto_enable_configs so that nginx is in a runnable state
 auto_enable_configs
 
