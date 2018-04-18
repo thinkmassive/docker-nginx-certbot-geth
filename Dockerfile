@@ -1,5 +1,5 @@
 FROM nginx
-MAINTAINER Elliot Saba <staticfloat@gmail.com>
+MAINTAINER Alexander Miller <alex@thinkmassive.org>
 
 VOLUME /etc/letsencrypt
 EXPOSE 80
